@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "974929119899",
+    "project_id": "gifttrack-70916",
+    "storage_bucket": "gifttrack-70916.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:974929119899:android:618c847e4568314ab6d43e",
+        "android_client_info": {
+          "package_name": "uk.ac.tees.mad.gifttrack"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAs0DhdFM44IJ6ENeT5UmAlzvG3iztKTw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
