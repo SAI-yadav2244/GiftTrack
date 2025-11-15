@@ -5,11 +5,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import uk.ac.tees.mad.gifttrack.ui.screens.AddGiftScreen
-import uk.ac.tees.mad.gifttrack.ui.screens.AuthScreen
+import uk.ac.tees.mad.gifttrack.ui.screens.auth.AuthScreen
 import uk.ac.tees.mad.gifttrack.ui.screens.CalendarScreen
 import uk.ac.tees.mad.gifttrack.ui.screens.GiftListScreen
 import uk.ac.tees.mad.gifttrack.ui.screens.ProfileScreen
 import uk.ac.tees.mad.gifttrack.ui.screens.SplashScreen
+import uk.ac.tees.mad.gifttrack.ui.screens.auth.AuthViewModel
 
 sealed class Routes(val route: String) {
     data object SPLASH : Routes("splash")
@@ -25,7 +26,7 @@ sealed class Routes(val route: String) {
 }
 
 @Composable
-fun AppNavHost(navController: NavHostController) {
+fun AppNavHost(navController: NavHostController, authViewModel: AuthViewModel) {
     NavHost(
         navController = navController,
         startDestination = Routes.SPLASH.route
@@ -47,6 +48,7 @@ fun AppNavHost(navController: NavHostController) {
 
         composable(Routes.AUTH.route) {
             AuthScreen(
+                authViewModel,
                 onLoginSuccess = {
                     navController.navigate(Routes.GIFT_LIST.route) {
                         popUpTo(Routes.AUTH.route) { inclusive = true }

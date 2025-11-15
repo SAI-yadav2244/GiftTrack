@@ -1,5 +1,7 @@
-package uk.ac.tees.mad.gifttrack.ui.screens
+package uk.ac.tees.mad.gifttrack.ui.screens.auth
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,21 +14,46 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.google.firebase.auth.FirebaseAuth
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 @Composable
 fun AuthScreen(
+    viewModel: AuthViewModel,
     onLoginSuccess: () -> Unit
 ) {
-    val auth = FirebaseAuth.getInstance()
+    val activity = LocalContext.current
+    val isLoggedIn by viewModel.isLoggedIn.collectAsState()
+
+    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        .requestIdToken("974929119899-28678lb7a543cjf1hgn7nfs4jndnenh5.apps.googleusercontent.com")
+//        .requestIdToken(BuildConfig.WEB_CLIENT_ID)
+        .requestEmail()
+        .build()
+
+    val googleSignInClient = GoogleSignIn.getClient(activity, gso)
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        viewModel.handleGoogleSignInResult(result.data)
+    }
+
+    LaunchedEffect(isLoggedIn) {
+        if (isLoggedIn) onLoginSuccess
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp),
+            .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -35,13 +62,13 @@ fun AuthScreen(
             style = MaterialTheme.typography.headlineMedium
         )
         Spacer(Modifier.height(20.dp))
-        Button(onClick = {
-            if(auth.currentUser != null) {
-                onLoginSuccess()
-            }
-        },
+        Button(
+            onClick = {
+                launcher.launch(googleSignInClient.signInIntent)
+            },
             shape = RoundedCornerShape(10.dp),
             elevation = ButtonDefaults.buttonElevation(6.dp),
+
             ) {
             Text("Continue with Google")
         }

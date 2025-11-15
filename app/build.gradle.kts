@@ -19,6 +19,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField(
+            "String",
+            "WEB_CLIENT_ID",
+            "\"${project.findProperty("WEB_CLIENT_ID") ?: ""}\""
+        )
     }
 
     buildTypes {
@@ -39,6 +44,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -116,4 +122,7 @@ dependencies {
     //Preferences DataStore
     implementation("androidx.datastore:datastore-preferences-core:1.1.7")
     implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+
 }

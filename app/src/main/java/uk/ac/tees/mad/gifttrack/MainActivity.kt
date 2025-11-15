@@ -7,11 +7,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavGraph
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import uk.ac.tees.mad.gifttrack.navigation.AppNavHost
+import uk.ac.tees.mad.gifttrack.ui.screens.auth.AuthViewModel
 import uk.ac.tees.mad.gifttrack.ui.theme.GiftTrackTheme
 
 class MainActivity : ComponentActivity() {
@@ -25,7 +26,8 @@ class MainActivity : ComponentActivity() {
             GiftTrackTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     val navController = rememberNavController()
-                    AppNavHost(navController)
+                    val authViewModel: AuthViewModel = viewModel()
+                    AppNavHost(navController, authViewModel)
                 }
             }
         }
