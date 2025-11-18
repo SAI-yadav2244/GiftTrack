@@ -20,9 +20,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import uk.ac.tees.mad.gifttrack.R
 
 @Composable
 fun AuthScreen(
@@ -33,7 +35,7 @@ fun AuthScreen(
     val isLoggedIn by viewModel.isLoggedIn.collectAsState()
 
     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-        .requestIdToken("974929119899-28678lb7a543cjf1hgn7nfs4jndnenh5.apps.googleusercontent.com")
+        .requestIdToken(stringResource(R.string.WEB_CLIENT_ID))
 //        .requestIdToken(BuildConfig.WEB_CLIENT_ID)
         .requestEmail()
         .build()
@@ -47,7 +49,7 @@ fun AuthScreen(
     }
 
     LaunchedEffect(isLoggedIn) {
-        if (isLoggedIn) onLoginSuccess
+        if (isLoggedIn) onLoginSuccess()
     }
 
     Column(

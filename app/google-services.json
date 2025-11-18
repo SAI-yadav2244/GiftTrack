@@ -12,7 +12,12 @@
           "package_name": "uk.ac.tees.mad.gifttrack"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "974929119899-28678lb7a543cjf1hgn7nfs4jndnenh5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCAs0DhdFM44IJ6ENeT5UmAlzvG3iztKTw"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "974929119899-28678lb7a543cjf1hgn7nfs4jndnenh5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

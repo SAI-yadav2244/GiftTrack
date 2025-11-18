@@ -11,10 +11,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import uk.ac.tees.mad.gifttrack.navigation.AppNavHost
 import uk.ac.tees.mad.gifttrack.ui.screens.auth.AuthViewModel
 import uk.ac.tees.mad.gifttrack.ui.theme.GiftTrackTheme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
