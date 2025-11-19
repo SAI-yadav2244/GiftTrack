@@ -1,13 +1,15 @@
 package uk.ac.tees.mad.gifttrack.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import uk.ac.tees.mad.gifttrack.ui.screens.AddGiftScreen
 import uk.ac.tees.mad.gifttrack.ui.screens.auth.AuthScreen
 import uk.ac.tees.mad.gifttrack.ui.screens.CalendarScreen
-import uk.ac.tees.mad.gifttrack.ui.screens.GiftListScreen
+import uk.ac.tees.mad.gifttrack.ui.gift.GiftListScreen
+import uk.ac.tees.mad.gifttrack.ui.gift.GiftListViewModel
 import uk.ac.tees.mad.gifttrack.ui.screens.ProfileScreen
 import uk.ac.tees.mad.gifttrack.ui.screens.SplashScreen
 import uk.ac.tees.mad.gifttrack.ui.screens.auth.AuthViewModel
@@ -26,7 +28,12 @@ sealed class Routes(val route: String) {
 }
 
 @Composable
-fun AppNavHost(navController: NavHostController, authViewModel: AuthViewModel) {
+fun AppNavHost(
+    navController: NavHostController,
+    authViewModel: AuthViewModel,
+    giftListViewModel: GiftListViewModel,
+    modifier: Modifier = Modifier
+) {
     NavHost(
         navController = navController,
         startDestination = Routes.SPLASH.route
@@ -58,9 +65,10 @@ fun AppNavHost(navController: NavHostController, authViewModel: AuthViewModel) {
         }
         composable(Routes.GIFT_LIST.route) {
             GiftListScreen(
-                onAddGift = { navController.navigate(Routes.ADD_GIFT.route) },
+                onAddClick = { navController.navigate(Routes.ADD_GIFT.route) },
                 onCalendarClick = { navController.navigate(Routes.CALENDAR.route) },
-                onProfileClick = { navController.navigate(Routes.PROFILE.route) }
+                onProfileClick = { navController.navigate(Routes.PROFILE.route) },
+                viewModel = giftListViewModel
             )
         }
 

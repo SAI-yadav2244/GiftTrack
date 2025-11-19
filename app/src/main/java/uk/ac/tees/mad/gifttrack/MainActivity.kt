@@ -4,9 +4,21 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -16,6 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import uk.ac.tees.mad.gifttrack.navigation.AppNavHost
 import uk.ac.tees.mad.gifttrack.navigation.BottomNavBar
 import uk.ac.tees.mad.gifttrack.navigation.Routes
+import uk.ac.tees.mad.gifttrack.ui.gift.GiftListViewModel
 import uk.ac.tees.mad.gifttrack.ui.screens.auth.AuthViewModel
 import uk.ac.tees.mad.gifttrack.ui.theme.GiftTrackTheme
 
@@ -29,24 +42,53 @@ class MainActivity : ComponentActivity() {
         val gso = GoogleSignInOptions.DEFAULT_SIGN_IN
         setContent {
             GiftTrackTheme {
-                val navController = rememberNavController()
-                val authViewModel: AuthViewModel = viewModel()
-                val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+//                Surface(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .windowInsetsPadding(WindowInsets.safeDrawing),
+//                    color = MaterialTheme.colorScheme.onBackground,
+//                ) {
+                    val navController = rememberNavController()
+                    val authViewModel: AuthViewModel = viewModel()
+                    val giftListViewModel: GiftListViewModel = viewModel()
+                    val currentRoute =
+                        navController.currentBackStackEntryAsState().value?.destination?.route
 
-                val showBottomBar = currentRoute in listOf(
-                    Routes.GIFT_LIST.route,
-                    Routes.CALENDAR.route,
-                    Routes.PROFILE.route
-                )
-
-
-                Scaffold(bottomBar = {
-                    if(showBottomBar) {
-                        BottomNavBar(navController)
+                    val showBottomBar = currentRoute in listOf(
+                        Routes.GIFT_LIST.route,
+                        Routes.CALENDAR.route,
+                        Routes.PROFILE.route
+                    )
+                    Scaffold(
+                        bottomBar = {
+                            if (showBottomBar) {
+                                BottomNavBar(navController)
+                            }
+                        },
+                        floatingActionButton = {
+                            if (currentRoute == "gift_list") {
+                                FloatingActionButton(
+                                    onClick = { navController.navigate(Routes.ADD_GIFT.route) },
+                                    containerColor = MaterialTheme.colorScheme.surface,
+                                    contentColor = MaterialTheme.colorScheme.onSurface,
+                                    elevation = FloatingActionButtonDefaults.elevation(
+                                        defaultElevation = 8.dp,
+                                        pressedElevation = 12.dp
+                                    )
+                                ) {
+                                    Icon(Icons.Default.Add, contentDescription = "Add Gift")
+                                }
+                            }
+                        },
+                    ) { innerPadding ->
+                        AppNavHost(
+                            navController,
+                            authViewModel,
+                            giftListViewModel,
+                            modifier = Modifier.padding(innerPadding)
+                        )
                     }
-                }, modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    AppNavHost(navController, authViewModel)
-                }
+//                }
             }
         }
     }
