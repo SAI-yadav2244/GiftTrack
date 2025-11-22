@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -47,8 +48,8 @@ class MainActivity : ComponentActivity() {
 //                    color = MaterialTheme.colorScheme.onBackground,
 //                ) {
                 val navController = rememberNavController()
-                val authViewModel: AuthViewModel = viewModel()
-                val giftListViewModel: GiftListViewModel = viewModel()
+                val authViewModel: AuthViewModel = hiltViewModel()
+                val giftListViewModel: GiftListViewModel = hiltViewModel()
                 val currentRoute =
                     navController.currentBackStackEntryAsState().value?.destination?.route
 
