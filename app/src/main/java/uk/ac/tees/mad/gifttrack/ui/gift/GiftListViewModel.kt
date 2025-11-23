@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import uk.ac.tees.mad.gifttrack.data.Gift
@@ -24,6 +25,18 @@ class GiftListViewModel @Inject constructor(
     fun deleteGift(id: String) {
         viewModelScope.launch { giftRepository.deleteGift(id) }
     }
+
+    private val _refreshing = MutableStateFlow(false)
+    val refreshing = _refreshing.asStateFlow()
+
+    fun refresh() {
+        viewModelScope.launch {
+            _refreshing.value = true
+            giftRepository.syncFromFirestore()
+            _refreshing.value = false
+        }
+    }
+
 //    private val _gifts = MutableStateFlow(
 //        listOf(
 //            Gift("1", "Mom", "Birthday", null, "2025-01-01", GiftStatus.GIVEN),

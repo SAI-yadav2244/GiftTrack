@@ -7,4 +7,5 @@ interface GiftRepository {
     fun getAllGifts(): Flow<List<Gift>>
     suspend fun insertGift(gift: Gift)
     suspend fun deleteGift(id: String)
+    suspend fun syncFromFirestore()
 }
