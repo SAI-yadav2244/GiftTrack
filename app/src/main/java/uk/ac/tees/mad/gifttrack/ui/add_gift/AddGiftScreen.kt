@@ -1,0 +1,123 @@
+package uk.ac.tees.mad.gifttrack.ui.add_gift
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddGiftScreen(
+    onBack: () -> Unit,
+    onSave: () -> Unit,
+    viewModel: AddGiftViewModel
+) {
+    val title by viewModel.title.collectAsState()
+    val recipient by viewModel.recipient.collectAsState()
+    val occasion by viewModel.occasion.collectAsState()
+    val price by viewModel.price.collectAsState()
+    val notes by viewModel.notes.collectAsState()
+    val status by viewModel.status.collectAsState()
+
+    var statusMenuExpanded by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+
+        AppTextField(
+            value = title,
+            onValueChange = viewModel::onTitleChange,
+            placeholder = "Title",
+            modifier = Modifier.fillMaxWidth(),
+        )
+
+        AppTextField(
+            value = recipient,
+            onValueChange = viewModel::onRecipientChange,
+            placeholder = "Recipient",
+            modifier = Modifier.fillMaxWidth(),
+        )
+
+        AppTextField(
+            value = occasion,
+            onValueChange = viewModel::onOccasionChange,
+            placeholder = "Occasion",
+            modifier = Modifier.fillMaxWidth(),
+        )
+
+        AppTextField(
+            value = price,
+            onValueChange = viewModel::onPriceChange,
+            placeholder = "Price",
+            modifier = Modifier.fillMaxWidth(),
+            keyboardType = KeyboardType.Number,
+        )
+
+        AppTextField(
+            value = notes,
+            onValueChange = viewModel::onNotesChange,
+            placeholder = "Notes",
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(120.dp),
+        )
+
+        // Status Dropdown
+        ExposedDropdownMenuBox(
+            expanded = statusMenuExpanded,
+            onExpandedChange = { statusMenuExpanded = !statusMenuExpanded }
+        ) {
+            AppTextField(
+                value = status,
+                onValueChange = {},
+                readOnly = true,
+                placeholder = "Status",
+                modifier = Modifier.fillMaxWidth()
+            )
+            ExposedDropdownMenu(
+                expanded = statusMenuExpanded,
+                onDismissRequest = { statusMenuExpanded = false }
+            ) {
+                listOf("Planned", "Given", "Received").forEach {
+                    DropdownMenuItem(
+                        text = { Text(it) },
+                        onClick = {
+                            viewModel.onStatusChange(it)
+                            statusMenuExpanded = false
+                        }
+                    )
+                }
+            }
+        }
+
+        Spacer(Modifier.height(20.dp))
+
+        Button(
+            onClick = onSave,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Save Gift")
+        }
+    }
+}

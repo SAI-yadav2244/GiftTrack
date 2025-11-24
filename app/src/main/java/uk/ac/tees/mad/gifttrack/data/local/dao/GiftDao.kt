@@ -35,6 +35,4 @@ interface GiftDao {
 
     @Query("DELETE FROM gifts")
     suspend fun clearAll()
-
-
 }

@@ -5,7 +5,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import uk.ac.tees.mad.gifttrack.ui.screens.AddGiftScreen
+import uk.ac.tees.mad.gifttrack.ui.add_gift.AddGiftScreen
+import uk.ac.tees.mad.gifttrack.ui.add_gift.AddGiftViewModel
 import uk.ac.tees.mad.gifttrack.ui.screens.auth.AuthScreen
 import uk.ac.tees.mad.gifttrack.ui.screens.CalendarScreen
 import uk.ac.tees.mad.gifttrack.ui.gift.GiftListScreen
@@ -32,6 +33,7 @@ fun AppNavHost(
     navController: NavHostController,
     authViewModel: AuthViewModel,
     giftListViewModel: GiftListViewModel,
+    addGiftViewModel: AddGiftViewModel,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -73,7 +75,7 @@ fun AppNavHost(
         }
 
         composable(Routes.ADD_GIFT.route) {
-            AddGiftScreen(onBack = { navController.navigateUp() })
+            AddGiftScreen(onBack = { navController.navigateUp() }, onSave = {}, addGiftViewModel)
         }
 
         composable(Routes.CALENDAR.route) {
