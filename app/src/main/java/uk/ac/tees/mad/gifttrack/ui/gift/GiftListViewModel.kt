@@ -5,19 +5,16 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import uk.ac.tees.mad.gifttrack.data.Gift
-import uk.ac.tees.mad.gifttrack.data.GiftStatus
 import uk.ac.tees.mad.gifttrack.domain.repository.GiftRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class GiftListViewModel @Inject constructor(
     private val giftRepository: GiftRepository
-): ViewModel() {
+) : ViewModel() {
 
     val gifts = giftRepository.getAllGifts()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())

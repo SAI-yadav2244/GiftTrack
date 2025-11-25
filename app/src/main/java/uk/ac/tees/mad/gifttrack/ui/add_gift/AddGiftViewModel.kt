@@ -3,8 +3,9 @@ package uk.ac.tees.mad.gifttrack.ui.add_gift
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
-class AddGiftViewModel: ViewModel() {
+class AddGiftViewModel @Inject constructor(): ViewModel() {
     private val _title = MutableStateFlow("")
     val title = _title.asStateFlow()
 
@@ -25,6 +26,11 @@ class AddGiftViewModel: ViewModel() {
 
     private val _status = MutableStateFlow("Planned")
     val status = _status.asStateFlow()
+
+    private val _imageUri = MutableStateFlow<String?>(null)
+    val imageUri = _imageUri.asStateFlow()
+    fun onImageCaptured(uri: String) { _imageUri.value = uri }
+
 
     fun onTitleChange(v: String) = run { _title.value = v }
     fun onRecipientChange(v: String) = run { _recipient.value = v }

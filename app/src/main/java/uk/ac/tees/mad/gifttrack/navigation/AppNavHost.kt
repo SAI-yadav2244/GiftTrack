@@ -2,17 +2,20 @@ package uk.ac.tees.mad.gifttrack.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.NavHost
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import uk.ac.tees.mad.gifttrack.ui.add_gift.AddGiftScreen
 import uk.ac.tees.mad.gifttrack.ui.add_gift.AddGiftViewModel
-import uk.ac.tees.mad.gifttrack.ui.screens.auth.AuthScreen
-import uk.ac.tees.mad.gifttrack.ui.screens.CalendarScreen
+import uk.ac.tees.mad.gifttrack.ui.camera.CameraScreen
+import uk.ac.tees.mad.gifttrack.ui.camera.CaptureViewModel
 import uk.ac.tees.mad.gifttrack.ui.gift.GiftListScreen
 import uk.ac.tees.mad.gifttrack.ui.gift.GiftListViewModel
+import uk.ac.tees.mad.gifttrack.ui.screens.CalendarScreen
 import uk.ac.tees.mad.gifttrack.ui.screens.ProfileScreen
 import uk.ac.tees.mad.gifttrack.ui.screens.SplashScreen
+import uk.ac.tees.mad.gifttrack.ui.screens.auth.AuthScreen
 import uk.ac.tees.mad.gifttrack.ui.screens.auth.AuthViewModel
 
 sealed class Routes(val route: String) {
@@ -22,6 +25,7 @@ sealed class Routes(val route: String) {
     data object ADD_GIFT : Routes("add_gift")
     data object CALENDAR : Routes("calendar")
     data object PROFILE : Routes("profile")
+    data object CAMERA : Routes("camera")
 
     data object ADD_GIFT_WITH_OCCASION : Routes("add_gift/{occasionId}") {
         fun createRoute(occasionId: String) = "add_gift/$occasionId"
@@ -34,6 +38,7 @@ fun AppNavHost(
     authViewModel: AuthViewModel,
     giftListViewModel: GiftListViewModel,
     addGiftViewModel: AddGiftViewModel,
+    captureViewModel: CaptureViewModel,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -75,7 +80,16 @@ fun AppNavHost(
         }
 
         composable(Routes.ADD_GIFT.route) {
-            AddGiftScreen(onBack = { navController.navigateUp() }, onSave = {}, addGiftViewModel)
+            AddGiftScreen(
+                onBack = { navController.navigateUp() },
+                onSave = {},
+                onNavigateToCamera = {
+                    navController.navigate(
+                        Routes.CAMERA.route
+                    )
+                },
+                viewModel = addGiftViewModel
+            )
         }
 
         composable(Routes.CALENDAR.route) {
@@ -90,6 +104,19 @@ fun AppNavHost(
                     }
                 },
                 onBack = { navController.navigateUp() }
+            )
+        }
+        composable(Routes.CAMERA.route) {
+            CameraScreen(
+                onImageCaptured = { uri ->
+                        addGiftViewModel.onImageCaptured(uri)
+//                    val vm = hiltViewModel<AddGiftViewModel>(
+//                        navController.getBackStackEntry(Routes.ADD_GIFT.route)
+//                    )
+//                    vm.onImageCaptured(uri)
+                },
+                onBack = { navController.navigateUp() },
+                viewModel = captureViewModel
             )
         }
 

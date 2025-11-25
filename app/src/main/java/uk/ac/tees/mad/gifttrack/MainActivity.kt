@@ -25,6 +25,7 @@ import uk.ac.tees.mad.gifttrack.navigation.AppNavHost
 import uk.ac.tees.mad.gifttrack.navigation.BottomNavBar
 import uk.ac.tees.mad.gifttrack.navigation.Routes
 import uk.ac.tees.mad.gifttrack.ui.add_gift.AddGiftViewModel
+import uk.ac.tees.mad.gifttrack.ui.camera.CaptureViewModel
 import uk.ac.tees.mad.gifttrack.ui.gift.GiftListViewModel
 import uk.ac.tees.mad.gifttrack.ui.screens.auth.AuthViewModel
 import uk.ac.tees.mad.gifttrack.ui.theme.GiftTrackTheme
@@ -52,6 +53,7 @@ class MainActivity : ComponentActivity() {
                 val authViewModel: AuthViewModel = hiltViewModel()
                 val giftListViewModel: GiftListViewModel = hiltViewModel()
                 val addGiftViewModel: AddGiftViewModel = hiltViewModel()
+                val captureViewModel: CaptureViewModel = hiltViewModel()
                 val currentRoute =
                     navController.currentBackStackEntryAsState().value?.destination?.route
 
@@ -87,7 +89,8 @@ class MainActivity : ComponentActivity() {
                         authViewModel,
                         giftListViewModel,
                         modifier = Modifier.padding(innerPadding),
-                        addGiftViewModel = addGiftViewModel
+                        addGiftViewModel = addGiftViewModel,
+                        captureViewModel = captureViewModel
                     )
                 }
 //                }

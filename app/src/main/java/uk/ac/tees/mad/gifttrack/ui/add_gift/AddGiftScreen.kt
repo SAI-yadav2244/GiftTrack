@@ -1,5 +1,6 @@
 package uk.ac.tees.mad.gifttrack.ui.add_gift
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,14 +24,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
+import uk.ac.tees.mad.gifttrack.ui.screens.auth.ProfileHeader
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddGiftScreen(
     onBack: () -> Unit,
     onSave: () -> Unit,
+    onNavigateToCamera: () -> Unit,
     viewModel: AddGiftViewModel
 ) {
+    val imageUri by viewModel.imageUri.collectAsState()
     val title by viewModel.title.collectAsState()
     val recipient by viewModel.recipient.collectAsState()
     val occasion by viewModel.occasion.collectAsState()
@@ -38,12 +45,32 @@ fun AddGiftScreen(
 
     var statusMenuExpanded by remember { mutableStateOf(false) }
 
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        ProfileHeader("Add Gift", onBackClick = onBack)
+        if (imageUri != null) {
+            Image(
+                painter = rememberAsyncImagePainter(imageUri),
+                contentDescription = "Gift Image",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+            )
+        }
+
+        Button(
+            onClick = { onNavigateToCamera() },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Take Photo")
+        }
 
         AppTextField(
             value = title,
