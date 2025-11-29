@@ -1,14 +1,17 @@
 package uk.ac.tees.mad.gifttrack.data.local.mappers
 
-import uk.ac.tees.mad.gifttrack.data.Gift
-import uk.ac.tees.mad.gifttrack.data.GiftStatus
 import uk.ac.tees.mad.gifttrack.data.local.entity.GiftEntity
+import uk.ac.tees.mad.gifttrack.domain.model.Gift
+import uk.ac.tees.mad.gifttrack.domain.model.GiftStatus
 
 fun GiftEntity.toDomain(): Gift =
     Gift(
         id = id,
+        title = title,
         recipientName = recipientName,
         occasion = occasion,
+        price = price,
+        notes = notes,
         imageUrl = imageUrl,
         date = date,
         status = when (status) {
@@ -22,8 +25,11 @@ fun GiftEntity.toDomain(): Gift =
 fun Gift.toEntity(): GiftEntity =
     GiftEntity(
         id = id,
+        title = title,
         recipientName = recipientName,
         occasion = occasion,
+        price = price,
+        notes = notes,
         imageUrl = imageUrl,
         date = date,
         status = when (status) {

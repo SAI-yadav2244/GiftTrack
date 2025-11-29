@@ -16,8 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import uk.ac.tees.mad.gifttrack.data.Gift
-import uk.ac.tees.mad.gifttrack.data.GiftStatus
+import uk.ac.tees.mad.gifttrack.domain.model.Gift
+import uk.ac.tees.mad.gifttrack.domain.model.GiftStatus
 
 @Composable
 fun GiftCard(

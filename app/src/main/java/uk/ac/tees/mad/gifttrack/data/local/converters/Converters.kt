@@ -1,7 +1,7 @@
 package uk.ac.tees.mad.gifttrack.data.local.converters
 
 import androidx.room.TypeConverter
-import uk.ac.tees.mad.gifttrack.data.GiftStatus
+import uk.ac.tees.mad.gifttrack.domain.model.GiftStatus
 
 class Converters {
     @TypeConverter

@@ -128,5 +128,9 @@ dependencies {
     //Refresh
 //    implementation("androidx.compose.material:material-pull-refresh:1.7.0")
 
+    //Cloudinary
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+
 
 }

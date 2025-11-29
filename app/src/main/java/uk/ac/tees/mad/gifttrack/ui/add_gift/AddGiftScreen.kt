@@ -7,13 +7,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import uk.ac.tees.mad.gifttrack.ui.GiftStatusDropdown
 import uk.ac.tees.mad.gifttrack.ui.screens.auth.ProfileHeader
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,11 +48,15 @@ fun AddGiftScreen(
 
     val scrollState = rememberScrollState()
 
+    val isSaving by viewModel.isSaving.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
             .padding(20.dp),
+//            .imePadding()
+//            .navigationBarsPadding(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         ProfileHeader("Add Gift", onBackClick = onBack)
@@ -111,40 +116,31 @@ fun AddGiftScreen(
         )
 
         // Status Dropdown
-        ExposedDropdownMenuBox(
-            expanded = statusMenuExpanded,
-            onExpandedChange = { statusMenuExpanded = !statusMenuExpanded }
-        ) {
-            AppTextField(
-                value = status,
-                onValueChange = {},
-                readOnly = true,
-                placeholder = "Status",
-                modifier = Modifier.fillMaxWidth()
-            )
-            ExposedDropdownMenu(
-                expanded = statusMenuExpanded,
-                onDismissRequest = { statusMenuExpanded = false }
-            ) {
-                listOf("Planned", "Given", "Received").forEach {
-                    DropdownMenuItem(
-                        text = { Text(it) },
-                        onClick = {
-                            viewModel.onStatusChange(it)
-                            statusMenuExpanded = false
-                        }
-                    )
-                }
-            }
-        }
+        GiftStatusDropdown(
+            status = status,
+            onStatusChange = viewModel::onStatusChange
+        )
 
         Spacer(Modifier.height(20.dp))
 
         Button(
-            onClick = onSave,
+            onClick = {
+                viewModel.saveGift(
+                    onSuccess = {
+                        println("Gift saved successfully")
+                        onSave()
+                    },
+                    onError = { error ->
+                        //TODO: toast
+                        println("Error saving gift: $error")
+                        onSave() // navigate back even on failure
+                    }
+                )
+            },
+            enabled = !isSaving,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Save Gift")
+            Text(if (isSaving) "Saving..." else "Save Gift")
         }
     }
 }

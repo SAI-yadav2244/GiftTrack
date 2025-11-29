@@ -6,7 +6,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-import uk.ac.tees.mad.gifttrack.data.Gift
 import uk.ac.tees.mad.gifttrack.data.local.entity.GiftEntity
 
 @Dao
@@ -24,8 +23,8 @@ interface GiftDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(gifts: List<GiftEntity>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertGifts(gifts: List<GiftEntity>)
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    suspend fun insertGifts(gifts: List<GiftEntity>)
 
     @Update
     suspend fun updateGift(gift: GiftEntity)
