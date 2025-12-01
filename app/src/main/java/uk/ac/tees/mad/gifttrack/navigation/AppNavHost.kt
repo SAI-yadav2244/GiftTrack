@@ -82,7 +82,7 @@ fun AppNavHost(
         composable(Routes.ADD_GIFT.route) {
             AddGiftScreen(
                 onBack = { navController.navigateUp() },
-                onSave = {},
+                onSave = { navController.navigateUp() },
                 onNavigateToCamera = {
                     navController.navigate(
                         Routes.CAMERA.route

@@ -2,6 +2,8 @@ package uk.ac.tees.mad.gifttrack.data.repository
 
 import android.content.Context
 import android.net.Uri
+import androidx.work.NetworkType
+import androidx.work.WorkManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -17,9 +19,11 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.asRequestBody
 import org.json.JSONObject
 import uk.ac.tees.mad.gifttrack.data.local.dao.GiftDao
+import uk.ac.tees.mad.gifttrack.data.local.entity.PendingGiftEntity
 import uk.ac.tees.mad.gifttrack.data.local.mappers.toDomain
 import uk.ac.tees.mad.gifttrack.data.local.mappers.toEntity
 import uk.ac.tees.mad.gifttrack.domain.model.Gift
+import uk.ac.tees.mad.gifttrack.domain.model.GiftStatus
 import uk.ac.tees.mad.gifttrack.domain.repository.GiftRepository
 import java.io.File
 import java.io.FileOutputStream
@@ -57,7 +61,35 @@ class GiftRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addGiftToFirestore(gift: Gift) {
-        val uid = auth.currentUser?.uid ?: throw IllegalStateException("User not logged in")
+        val uid = auth.currentUser?.uid
+        if (uid == null) {
+            giftDao.insertPendingGift(
+                PendingGiftEntity(
+                    title = gift.title,
+                    recipientName = gift.recipientName,
+                    occasion = gift.occasion,
+                    price = gift.price,
+                    notes = gift.notes,
+                    imageUri = gift.imageUrl,
+                    date = gift.date,
+                    status = when (gift.status) {
+                        GiftStatus.GIVEN -> 0
+                        GiftStatus.PLANNED -> 1
+                        GiftStatus.RECEIVED -> 2
+                    }
+                )
+            )
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
+
+            val work = OneTimeWorkRequestBuilder<GiftSyncWorker>()
+                .setConstraints(constraints)
+                .build()
+
+            WorkManager.getInstance(context).enqueue(work)
+            return
+        }
 
         firestore.collection("users")
             .document(uid)
@@ -65,6 +97,7 @@ class GiftRepositoryImpl @Inject constructor(
             .document(gift.id)
             .set(gift)
             .await()
+
         giftDao.insertGift(gift.toEntity())
     }
 
