@@ -1,7 +1,7 @@
 package uk.ac.tees.mad.gifttrack.di
 
 import android.content.Context
-import com.cloudinary.Cloudinary
+//import com.cloudinary.Cloudinary
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -18,18 +18,18 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
 
-    @Provides
-    @Singleton
-    fun provideCloudinary(): Cloudinary {
-        // ⚠️ Replace with your real Cloudinary credentials
-        return Cloudinary(
-            ObjectUtils.asMap(
-                "cloud_name", "YOUR_CLOUD_NAME",
-                "api_key", "YOUR_API_KEY",
-                "api_secret", "YOUR_API_SECRET"
-            )
-        )
-    }
+//    @Provides
+//    @Singleton
+//    fun provideCloudinary(): Cloudinary {
+//        // ⚠️ Replace with your real Cloudinary credentials
+//        return Cloudinary(
+//            ObjectUtils.asMap(
+//                "cloud_name", "YOUR_CLOUD_NAME",
+//                "api_key", "YOUR_API_KEY",
+//                "api_secret", "YOUR_API_SECRET"
+//            )
+//        )
+//    }
 
     @Provides
     @Singleton
