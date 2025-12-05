@@ -6,10 +6,14 @@ import androidx.room.TypeConverters
 import uk.ac.tees.mad.gifttrack.data.local.converters.Converters
 import uk.ac.tees.mad.gifttrack.data.local.dao.GiftDao
 import uk.ac.tees.mad.gifttrack.data.local.entity.GiftEntity
+import uk.ac.tees.mad.gifttrack.data.local.entity.PendingGiftEntity
 
 @Database(
-    entities = [GiftEntity::class],
-    version = 1,
+    entities = [
+        GiftEntity::class,
+        PendingGiftEntity::class
+    ],
+    version = 3,
     exportSchema = false
 )
 

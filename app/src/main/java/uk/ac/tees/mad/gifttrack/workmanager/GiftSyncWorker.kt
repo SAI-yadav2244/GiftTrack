@@ -33,8 +33,7 @@ class GiftSyncWorker @AssistedInject constructor(
                 // Upload image to Cloudinary if exists
                 val imageUrl = gift.imageUri?.let { uri ->
                     val file = File(uri)
-                    val uploadResult = cloudinary.uploader().upload(file, mapOf())
-                    uploadResult["secure_url"] as? String
+                    cloudinary.uploader().upload(file, emptyMap<String, Any>())["secure_url"] as? String
                 }
 
                 // Upload to Firestore

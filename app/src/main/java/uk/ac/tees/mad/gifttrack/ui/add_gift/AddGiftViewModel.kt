@@ -3,9 +3,6 @@ package uk.ac.tees.mad.gifttrack.ui.add_gift
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +10,6 @@ import kotlinx.coroutines.launch
 import uk.ac.tees.mad.gifttrack.domain.model.Gift
 import uk.ac.tees.mad.gifttrack.domain.model.GiftStatus
 import uk.ac.tees.mad.gifttrack.domain.repository.GiftRepository
-import uk.ac.tees.mad.gifttrack.workmanager.GiftSyncWorker
 import java.util.UUID
 import javax.inject.Inject
 
@@ -82,7 +78,7 @@ class AddGiftViewModel @Inject constructor(
                         println("Image uploaded: $imageUrl")
                     } catch (e: Exception) {
                         onError("Image upload failed: ${e.message}")
-                        return@launch
+                        imageUrl = null // continue saving
                     }
                 }
 
@@ -112,4 +108,23 @@ class AddGiftViewModel @Inject constructor(
         }
 
     }
+
+    fun updateGift(updatedGift: Gift, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        viewModelScope.launch {
+            try {
+                giftRepository.updateGiftInFirestore(updatedGift)
+                onSuccess()
+            } catch (e: Exception) {
+                onError(e.message ?: "Failed to update gift")
+            }
+        }
+    }
+
+    fun onStatusChange(gift: Gift, newStatus: GiftStatus) {
+        viewModelScope.launch {
+            val updated = gift.copy(status = newStatus)
+            giftRepository.updateGiftInFirestore(updated)
+        }
+    }
+
 }

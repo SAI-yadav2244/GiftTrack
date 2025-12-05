@@ -2,8 +2,6 @@ package uk.ac.tees.mad.gifttrack.data.repository
 
 import android.content.Context
 import android.net.Uri
-import androidx.work.NetworkType
-import androidx.work.WorkManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -61,8 +59,54 @@ class GiftRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addGiftToFirestore(gift: Gift) {
+        val uid = auth.currentUser?.uid ?: return
+//        if (uid == null) {
+//            giftDao.insertPendingGift(
+//                PendingGiftEntity(
+//                    title = gift.title,
+//                    recipientName = gift.recipientName,
+//                    occasion = gift.occasion,
+//                    price = gift.price,
+//                    notes = gift.notes,
+//                    imageUri = gift.imageUrl,
+//                    date = gift.date,
+//                    status = when (gift.status) {
+//                        GiftStatus.GIVEN -> 0
+//                        GiftStatus.PLANNED -> 1
+//                        GiftStatus.RECEIVED -> 2
+//                    }
+//                )
+//            )
+//            val constraints = Constraints.Builder()
+//                .setRequiredNetworkType(NetworkType.CONNECTED)
+//                .build()
+//
+//            val work = OneTimeWorkRequestBuilder<GiftSyncWorker>()
+//                .setConstraints(constraints)
+//                .build()
+//
+//            WorkManager.getInstance(context).enqueue(work)
+//            return
+//        }
+
+        firestore.collection("users")
+            .document(uid)
+            .collection("gifts")
+            .document(gift.id)
+            .set(gift)
+            .await()
+
+        giftDao.insertGift(gift.toEntity())
+    }
+
+    override suspend fun updateGift(gift: Gift) {
+        giftDao.updateGift(gift.toEntity())
+    }
+
+    override suspend fun updateGiftInFirestore(gift: Gift) {
         val uid = auth.currentUser?.uid
         if (uid == null) {
+            // Offline fallback: mark for pending sync
             giftDao.insertPendingGift(
                 PendingGiftEntity(
                     title = gift.title,
@@ -79,15 +123,6 @@ class GiftRepositoryImpl @Inject constructor(
                     }
                 )
             )
-            val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build()
-
-            val work = OneTimeWorkRequestBuilder<GiftSyncWorker>()
-                .setConstraints(constraints)
-                .build()
-
-            WorkManager.getInstance(context).enqueue(work)
             return
         }
 
@@ -98,7 +133,7 @@ class GiftRepositoryImpl @Inject constructor(
             .set(gift)
             .await()
 
-        giftDao.insertGift(gift.toEntity())
+        giftDao.updateGift(gift.toEntity())
     }
 
     override suspend fun uploadGiftImage(localUri: Uri): String {
@@ -114,14 +149,21 @@ class GiftRepositoryImpl @Inject constructor(
                     .addFormDataPart("upload_preset", uploadPreset)
                     .build()
 
-                val client = OkHttpClient()
+                val client = OkHttpClient.Builder()
+                    .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+                    .readTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+                    .writeTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+                    .retryOnConnectionFailure(true)
+                    .build()
+
                 val request = Request.Builder()
                     .url(uploadUrl)
                     .post(requestBody)
                     .build()
 
                 val response = client.newCall(request).execute()
-                val body = response.body?.string() ?: throw Exception("Empty response from Cloudinary")
+                val body =
+                    response.body?.string() ?: throw Exception("Empty response from Cloudinary")
                 val json = JSONObject(body)
                 val url = json.optString("secure_url", "")
                 if (url.isBlank()) throw Exception("Cloudinary upload failed (no secure_url). body=$body")
@@ -134,7 +176,8 @@ class GiftRepositoryImpl @Inject constructor(
     }
 
     private fun uriToTempFile(uri: Uri): File {
-        val input = context.contentResolver.openInputStream(uri) ?: throw IllegalArgumentException("Unable to open URI: $uri")
+        val input = context.contentResolver.openInputStream(uri)
+            ?: throw IllegalArgumentException("Unable to open URI: $uri")
         val temp = File.createTempFile("upload_", ".jpg", context.cacheDir)
         FileOutputStream(temp).use { out ->
             input.copyTo(out)
@@ -142,6 +185,7 @@ class GiftRepositoryImpl @Inject constructor(
         input.close()
         return temp
     }
+
     override suspend fun syncFromFirestore() {
         val uid = auth.currentUser?.uid ?: return
         val snapshot = firestore.collection("users")

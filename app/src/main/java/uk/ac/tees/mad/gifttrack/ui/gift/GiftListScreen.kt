@@ -18,6 +18,7 @@ fun GiftListScreen(
     onAddClick: () -> Unit,
     viewModel: GiftListViewModel,
     onCalendarClick: () -> Unit,
+    onGiftClick: (String) -> Unit,
     onProfileClick: () -> Unit
 ) {
     val gifts = viewModel.gifts.collectAsState(initial = emptyList())

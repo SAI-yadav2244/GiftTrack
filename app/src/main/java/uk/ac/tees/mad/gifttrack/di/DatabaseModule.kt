@@ -22,7 +22,8 @@ object DatabaseModule {
             appContext,
             AppDatabase::class.java,
             "gifttrack_db"
-        ).fallbackToDestructiveMigration().build()
+        ).fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides
