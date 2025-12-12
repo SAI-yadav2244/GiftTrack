@@ -18,6 +18,7 @@ import uk.ac.tees.mad.gifttrack.ui.screens.ProfileScreen
 import uk.ac.tees.mad.gifttrack.ui.screens.SplashScreen
 import uk.ac.tees.mad.gifttrack.ui.screens.auth.AuthScreen
 import uk.ac.tees.mad.gifttrack.ui.screens.auth.AuthViewModel
+import uk.ac.tees.mad.gifttrack.ui.viewmodel.ProfileViewModel
 
 sealed class Routes(val route: String) {
     data object SPLASH : Routes("splash")
@@ -40,6 +41,7 @@ fun AppNavHost(
     giftListViewModel: GiftListViewModel,
     addGiftViewModel: AddGiftViewModel,
     captureViewModel: CaptureViewModel,
+    profileViewModel: ProfileViewModel,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -118,12 +120,12 @@ fun AppNavHost(
 
         composable(Routes.PROFILE.route) {
             ProfileScreen(
-                onLogoutClick = {
+                onLogout = {
                     navController.navigate(Routes.AUTH.route) {
                         popUpTo(Routes.GIFT_LIST.route) { inclusive = true }
                     }
                 },
-                onBack = { navController.navigateUp() }
+                viewModel = profileViewModel
             )
         }
         composable(Routes.CAMERA.route) {

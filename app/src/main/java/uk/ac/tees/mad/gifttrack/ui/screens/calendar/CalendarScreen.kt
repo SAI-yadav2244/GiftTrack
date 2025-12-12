@@ -45,7 +45,7 @@ fun CalendarScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+//            .background(MaterialTheme.colorScheme.background)
             .verticalScroll(scrollState)
     ) {
 
@@ -53,7 +53,7 @@ fun CalendarScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primary)
+//                .background(MaterialTheme.colorScheme.primary)
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -123,7 +123,7 @@ fun CalendarScreen(
                 .fillMaxWidth()
                 .height(400.dp)
                 .padding(16.dp)
-                .background(MaterialTheme.colorScheme.surface)
+//                .background(MaterialTheme.colorScheme.onSurface)
         )
 
         Spacer(Modifier.height(16.dp))
@@ -132,7 +132,7 @@ fun CalendarScreen(
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+//            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
         ) {
             Column(Modifier.padding(16.dp)) {
                 Text(

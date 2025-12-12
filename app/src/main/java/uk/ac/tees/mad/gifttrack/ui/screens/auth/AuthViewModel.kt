@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val auth: FirebaseAuth,
+    private val firestore: FirebaseFirestore,
     private val giftRepository: GiftRepository
 ) : ViewModel() {
 //    private val auth = FirebaseAuth.getInstance()
@@ -32,6 +35,7 @@ class AuthViewModel @Inject constructor(
             val credential = GoogleAuthProvider.getCredential(account.idToken, null)
             auth.signInWithCredential(credential).addOnCompleteListener {
                 if (task.isSuccessful) {
+                    saveUserProfileToFirestore()
                     _isLoggedIn.value = true
                     println("Sign-in successful: ${auth.currentUser?.email}")
                     syncUserData()
@@ -56,6 +60,25 @@ class AuthViewModel @Inject constructor(
             }
         }
     }
+
+    private fun saveUserProfileToFirestore() {
+        val user = auth.currentUser ?: return
+        val uid = user.uid
+
+        val profile = mapOf(
+            "name" to (user.displayName ?: ""),
+            "email" to (user.email ?: ""),
+            "photoUrl" to (user.photoUrl?.toString() ?: ""),
+            "bio" to "",
+            "themeMode" to false,
+            "notifications" to true
+        )
+
+        firestore.collection("users")
+            .document(uid)
+            .set(profile, SetOptions.merge())
+    }
+
 
     fun signOut() {
         auth.signOut()

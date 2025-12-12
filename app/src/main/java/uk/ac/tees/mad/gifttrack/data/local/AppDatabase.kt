@@ -13,7 +13,7 @@ import uk.ac.tees.mad.gifttrack.data.local.entity.PendingGiftEntity
         GiftEntity::class,
         PendingGiftEntity::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 
