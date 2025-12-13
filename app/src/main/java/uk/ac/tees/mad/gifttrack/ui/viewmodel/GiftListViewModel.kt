@@ -1,4 +1,4 @@
-package uk.ac.tees.mad.gifttrack.ui.gift
+package uk.ac.tees.mad.gifttrack.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,7 +17,7 @@ class GiftListViewModel @Inject constructor(
 ) : ViewModel() {
 
     val gifts = giftRepository.getAllGifts()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+        .stateIn(viewModelScope, SharingStarted.Companion.WhileSubscribed(), emptyList())
 
     fun deleteGift(id: String) {
         viewModelScope.launch { giftRepository.deleteGift(id) }

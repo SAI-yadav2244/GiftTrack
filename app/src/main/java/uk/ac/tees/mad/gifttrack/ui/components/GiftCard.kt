@@ -1,6 +1,7 @@
-package uk.ac.tees.mad.gifttrack.ui.gift
+package uk.ac.tees.mad.gifttrack.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,7 +23,8 @@ import uk.ac.tees.mad.gifttrack.domain.model.GiftStatus
 @Composable
 fun GiftCard(
     gift: Gift,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onGiftClick: () -> Unit
 ) {
     val statusColor = when (gift.status) {
         GiftStatus.GIVEN -> MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
@@ -32,6 +34,7 @@ fun GiftCard(
     Card(
         shape = RoundedCornerShape(14.dp),
         modifier = modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+            .clickable { onGiftClick() }
     ) {
         Row(
             modifier = Modifier

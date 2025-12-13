@@ -1,11 +1,11 @@
-package uk.ac.tees.mad.gifttrack.ui.screens.calendar
+package uk.ac.tees.mad.gifttrack.ui.screens
 
+import android.widget.CalendarView
 import android.widget.Toast
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -16,8 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import uk.ac.tees.mad.gifttrack.ui.gift.GiftListViewModel
+import uk.ac.tees.mad.gifttrack.ui.viewmodel.GiftListViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -59,7 +58,7 @@ fun CalendarScreen(
         ) {
             IconButton(onClick = onBack) {
                 Icon(
-                    imageVector = androidx.compose.material.icons.Icons.Default.ArrowBack,
+                    imageVector = Icons.Default.ArrowBack,
                     tint = Color.White,
                     contentDescription = "Back"
                 )
@@ -80,7 +79,7 @@ fun CalendarScreen(
 
         AndroidView(
             factory = { context ->
-                android.widget.CalendarView(context).apply {
+                CalendarView(context).apply {
                     date = System.currentTimeMillis()
 
                     setOnDateChangeListener { _, year, month, dayOfMonth ->

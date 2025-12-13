@@ -1,4 +1,4 @@
-package uk.ac.tees.mad.gifttrack.ui
+package uk.ac.tees.mad.gifttrack.ui.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
@@ -23,7 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import uk.ac.tees.mad.gifttrack.domain.model.Gift
 import uk.ac.tees.mad.gifttrack.domain.model.GiftStatus
-import uk.ac.tees.mad.gifttrack.ui.add_gift.AddGiftViewModel
+import uk.ac.tees.mad.gifttrack.ui.viewmodel.AddGiftViewModel
 
 @Composable
 fun EditGiftScreen(

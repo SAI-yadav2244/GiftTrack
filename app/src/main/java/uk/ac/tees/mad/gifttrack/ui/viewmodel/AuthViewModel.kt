@@ -1,4 +1,4 @@
-package uk.ac.tees.mad.gifttrack.ui.screens.auth
+package uk.ac.tees.mad.gifttrack.ui.viewmodel
 
 import android.content.Intent
 import androidx.lifecycle.ViewModel

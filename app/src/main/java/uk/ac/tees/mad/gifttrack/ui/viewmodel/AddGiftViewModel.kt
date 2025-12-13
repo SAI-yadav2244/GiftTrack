@@ -1,4 +1,4 @@
-package uk.ac.tees.mad.gifttrack.ui.add_gift
+package uk.ac.tees.mad.gifttrack.ui.viewmodel
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel

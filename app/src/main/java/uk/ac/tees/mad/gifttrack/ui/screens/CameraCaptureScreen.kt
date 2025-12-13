@@ -1,4 +1,4 @@
-package uk.ac.tees.mad.gifttrack.ui.camera
+package uk.ac.tees.mad.gifttrack.ui.screens
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -24,8 +24,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import uk.ac.tees.mad.gifttrack.ui.viewmodel.CaptureViewModel
 import java.io.File
 
 @Composable

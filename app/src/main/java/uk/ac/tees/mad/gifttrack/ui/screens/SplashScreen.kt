@@ -39,7 +39,7 @@ fun SplashScreen(
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(R.drawable.ic_gift),
+            painter = painterResource(R.drawable.playstoreicon),
             contentDescription = "GiftTrack Logo",
             modifier = Modifier
                 .size(160.dp)

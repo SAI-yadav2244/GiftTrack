@@ -1,4 +1,4 @@
-package uk.ac.tees.mad.gifttrack.ui.screens.auth
+package uk.ac.tees.mad.gifttrack.ui.screens
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import uk.ac.tees.mad.gifttrack.R
+import uk.ac.tees.mad.gifttrack.ui.viewmodel.AuthViewModel
 
 @Composable
 fun AuthScreen(

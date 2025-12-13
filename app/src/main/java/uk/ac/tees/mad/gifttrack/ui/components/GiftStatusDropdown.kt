@@ -1,4 +1,4 @@
-package uk.ac.tees.mad.gifttrack.ui
+package uk.ac.tees.mad.gifttrack.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DropdownMenuItem

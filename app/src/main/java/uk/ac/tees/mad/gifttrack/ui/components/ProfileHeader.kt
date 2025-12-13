@@ -1,4 +1,4 @@
-package uk.ac.tees.mad.gifttrack.ui.screens.auth
+package uk.ac.tees.mad.gifttrack.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.nio.file.WatchEvent
 
 @Composable
 fun ProfileHeader(

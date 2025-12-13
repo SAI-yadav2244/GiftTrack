@@ -6,18 +6,18 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import uk.ac.tees.mad.gifttrack.ui.EditGiftScreen
-import uk.ac.tees.mad.gifttrack.ui.add_gift.AddGiftScreen
-import uk.ac.tees.mad.gifttrack.ui.add_gift.AddGiftViewModel
-import uk.ac.tees.mad.gifttrack.ui.camera.CameraScreen
-import uk.ac.tees.mad.gifttrack.ui.camera.CaptureViewModel
-import uk.ac.tees.mad.gifttrack.ui.gift.GiftListScreen
-import uk.ac.tees.mad.gifttrack.ui.gift.GiftListViewModel
-import uk.ac.tees.mad.gifttrack.ui.screens.calendar.CalendarScreen
+import uk.ac.tees.mad.gifttrack.ui.screens.EditGiftScreen
+import uk.ac.tees.mad.gifttrack.ui.screens.AddGiftScreen
+import uk.ac.tees.mad.gifttrack.ui.viewmodel.AddGiftViewModel
+import uk.ac.tees.mad.gifttrack.ui.screens.CameraScreen
+import uk.ac.tees.mad.gifttrack.ui.viewmodel.CaptureViewModel
+import uk.ac.tees.mad.gifttrack.ui.screens.GiftListScreen
+import uk.ac.tees.mad.gifttrack.ui.viewmodel.GiftListViewModel
+import uk.ac.tees.mad.gifttrack.ui.screens.CalendarScreen
 import uk.ac.tees.mad.gifttrack.ui.screens.ProfileScreen
 import uk.ac.tees.mad.gifttrack.ui.screens.SplashScreen
-import uk.ac.tees.mad.gifttrack.ui.screens.auth.AuthScreen
-import uk.ac.tees.mad.gifttrack.ui.screens.auth.AuthViewModel
+import uk.ac.tees.mad.gifttrack.ui.screens.AuthScreen
+import uk.ac.tees.mad.gifttrack.ui.viewmodel.AuthViewModel
 import uk.ac.tees.mad.gifttrack.ui.viewmodel.ProfileViewModel
 
 sealed class Routes(val route: String) {
@@ -75,9 +75,6 @@ fun AppNavHost(
         }
         composable(Routes.GIFT_LIST.route) {
             GiftListScreen(
-                onAddClick = { navController.navigate(Routes.ADD_GIFT.route) },
-                onCalendarClick = { navController.navigate(Routes.CALENDAR.route) },
-                onProfileClick = { navController.navigate(Routes.PROFILE.route) },
                 viewModel = giftListViewModel,
                 onGiftClick = { giftId ->
                     navController.navigate(Routes.EDIT_GIFT.createRoute(giftId))

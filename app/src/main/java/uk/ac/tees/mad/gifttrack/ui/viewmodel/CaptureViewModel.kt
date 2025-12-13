@@ -1,4 +1,4 @@
-package uk.ac.tees.mad.gifttrack.ui.camera
+package uk.ac.tees.mad.gifttrack.ui.viewmodel
 
 import android.net.Uri
 import androidx.camera.core.AspectRatio
@@ -18,7 +18,7 @@ class CaptureViewModel @Inject constructor() : ViewModel() {
         .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
         .build()
 
-    fun savePhoto(file: File,  executor: Executor, onSaved: (Uri) -> Unit, onError: (Exception) -> Unit) {
+    fun savePhoto(file: File, executor: Executor, onSaved: (Uri) -> Unit, onError: (Exception) -> Unit) {
         val outputOptions = ImageCapture.OutputFileOptions.Builder(file).build()
 
         imageCapture.takePicture(

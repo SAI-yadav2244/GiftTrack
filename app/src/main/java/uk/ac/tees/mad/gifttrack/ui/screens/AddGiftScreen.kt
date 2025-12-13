@@ -1,4 +1,4 @@
-package uk.ac.tees.mad.gifttrack.ui.add_gift
+package uk.ac.tees.mad.gifttrack.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -25,8 +23,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import uk.ac.tees.mad.gifttrack.ui.GiftStatusDropdown
-import uk.ac.tees.mad.gifttrack.ui.screens.auth.ProfileHeader
+import uk.ac.tees.mad.gifttrack.ui.components.GiftStatusDropdown
+import uk.ac.tees.mad.gifttrack.ui.viewmodel.AddGiftViewModel
+import uk.ac.tees.mad.gifttrack.ui.components.AppTextField
+import uk.ac.tees.mad.gifttrack.ui.components.ProfileHeader
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
