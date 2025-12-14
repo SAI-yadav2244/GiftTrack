@@ -13,7 +13,7 @@ import uk.ac.tees.mad.gifttrack.ui.camera.CameraScreen
 import uk.ac.tees.mad.gifttrack.ui.camera.CaptureViewModel
 import uk.ac.tees.mad.gifttrack.ui.gift.GiftListScreen
 import uk.ac.tees.mad.gifttrack.ui.gift.GiftListViewModel
-import uk.ac.tees.mad.gifttrack.ui.screens.CalendarScreen
+import uk.ac.tees.mad.gifttrack.ui.screens.calendar.CalendarScreen
 import uk.ac.tees.mad.gifttrack.ui.screens.ProfileScreen
 import uk.ac.tees.mad.gifttrack.ui.screens.SplashScreen
 import uk.ac.tees.mad.gifttrack.ui.screens.auth.AuthScreen
@@ -109,7 +109,11 @@ fun AppNavHost(
         }
 
         composable(Routes.CALENDAR.route) {
-            CalendarScreen(onBack = { navController.navigateUp() })
+            CalendarScreen(
+                onBack = { navController.navigateUp() }, giftListViewModel = giftListViewModel, onAddGiftForDate = { date ->
+                    navController.navigate(Routes.ADD_GIFT.route)
+                },
+                onEditGiftForDate = { navController.navigate(Routes.EDIT_GIFT.route) })
         }
 
         composable(Routes.PROFILE.route) {

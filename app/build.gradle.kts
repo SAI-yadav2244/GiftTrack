@@ -133,7 +133,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.cloudinary:cloudinary-android:3.0.2")
 
-
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
 
 
 }
