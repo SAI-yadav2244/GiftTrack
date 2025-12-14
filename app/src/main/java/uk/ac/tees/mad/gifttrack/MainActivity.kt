@@ -21,6 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import uk.ac.tees.mad.gifttrack.data.remote.EtsyViewModel
 import uk.ac.tees.mad.gifttrack.navigation.AppNavHost
 import uk.ac.tees.mad.gifttrack.navigation.BottomNavBar
 import uk.ac.tees.mad.gifttrack.navigation.Routes
@@ -56,6 +57,7 @@ class MainActivity : ComponentActivity() {
                 val addGiftViewModel: AddGiftViewModel = hiltViewModel()
                 val captureViewModel: CaptureViewModel = hiltViewModel()
                 val profileViewModel: ProfileViewModel = hiltViewModel()
+                val etsyViewModel: EtsyViewModel = hiltViewModel()
                 val currentRoute =
                     navController.currentBackStackEntryAsState().value?.destination?.route
 
@@ -93,7 +95,8 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding),
                         addGiftViewModel = addGiftViewModel,
                         captureViewModel = captureViewModel,
-                        profileViewModel = profileViewModel
+                        profileViewModel = profileViewModel,
+                        etsyViewModel = etsyViewModel
                     )
                 }
 //                }

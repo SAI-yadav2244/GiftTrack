@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import uk.ac.tees.mad.gifttrack.data.remote.EtsyViewModel
 import uk.ac.tees.mad.gifttrack.ui.screens.EditGiftScreen
 import uk.ac.tees.mad.gifttrack.ui.screens.AddGiftScreen
 import uk.ac.tees.mad.gifttrack.ui.viewmodel.AddGiftViewModel
@@ -42,6 +43,7 @@ fun AppNavHost(
     addGiftViewModel: AddGiftViewModel,
     captureViewModel: CaptureViewModel,
     profileViewModel: ProfileViewModel,
+    etsyViewModel: EtsyViewModel,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -59,7 +61,8 @@ fun AppNavHost(
                     navController.navigate(Routes.GIFT_LIST.route) {
                         popUpTo(Routes.SPLASH.route) { inclusive = true }
                     }
-                }
+                },
+                viewModel = etsyViewModel
             )
         }
 
@@ -91,7 +94,8 @@ fun AppNavHost(
                         Routes.CAMERA.route
                     )
                 },
-                viewModel = addGiftViewModel
+                viewModel = addGiftViewModel,
+                etsyViewModel = etsyViewModel
             )
         }
 

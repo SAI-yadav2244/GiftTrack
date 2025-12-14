@@ -14,6 +14,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import uk.ac.tees.mad.gifttrack.data.remote.EtsyViewModel
 import uk.ac.tees.mad.gifttrack.ui.components.GiftStatusDropdown
 import uk.ac.tees.mad.gifttrack.ui.viewmodel.AddGiftViewModel
 import uk.ac.tees.mad.gifttrack.ui.components.AppTextField
@@ -34,7 +36,8 @@ fun AddGiftScreen(
     onBack: () -> Unit,
     onSave: () -> Unit,
     onNavigateToCamera: () -> Unit,
-    viewModel: AddGiftViewModel
+    viewModel: AddGiftViewModel,
+    etsyViewModel: EtsyViewModel
 ) {
     val imageUri by viewModel.imageUri.collectAsState()
     val title by viewModel.title.collectAsState()
@@ -49,6 +52,12 @@ fun AddGiftScreen(
     val scrollState = rememberScrollState()
 
     val isSaving by viewModel.isSaving.collectAsState()
+
+    val suggestions by etsyViewModel.suggestedGifts.collectAsState()
+
+    LaunchedEffect(Unit) {
+        etsyViewModel.loadTrendingGifts("gifts for ${recipient.ifBlank { "friends" }}")
+    }
 
     Column(
         modifier = Modifier
@@ -141,6 +150,12 @@ fun AddGiftScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(if (isSaving) "Saving..." else "Save Gift")
+        }
+        if (suggestions.isNotEmpty()) {
+            Text("Suggested Gifts:")
+            suggestions.take(3).forEach {
+                Text("• ${it.title}")
+            }
         }
     }
 }
