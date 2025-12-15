@@ -5,7 +5,9 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -53,5 +55,11 @@ fun SplashScreen(
                 .size(160.dp)
                 .alpha(alphaAnim.value)
         )
+        if (gifts.isNotEmpty()) {
+            Text(
+                text = "Gift of the Day: ${gifts.first().title}",
+                modifier = Modifier.padding(top = 24.dp)
+            )
+        }
     }
 }

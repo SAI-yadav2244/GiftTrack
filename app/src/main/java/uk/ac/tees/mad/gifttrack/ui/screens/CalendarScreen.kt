@@ -1,8 +1,14 @@
 package uk.ac.tees.mad.gifttrack.ui.screens
 
+import android.os.Build
+import android.view.ViewGroup
 import android.widget.CalendarView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -12,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -30,39 +37,29 @@ fun CalendarScreen(
 ) {
     val context = LocalContext.current
 
-//    val systemUi = rememberSystemUiController()
-//    val color = MaterialTheme.colorScheme.primary
-//
-//    SideEffect {systemUi.setStatusBarColor(color)}
-
     val gifts by giftListViewModel.gifts.collectAsState()
 
     val dateFormatter = remember { SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()) }
 
     val scrollState = rememberScrollState()
-    // Screen Content (NO SCAFFOLD)
+
+//    val backgroundColor = MaterialTheme.colorScheme.surface
+//    val isDark = isSystemInDarkTheme()
+//    val textColor = if (isDark) android.graphics.Color.WHITE else android.graphics.Color.BLACK
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-//            .background(MaterialTheme.colorScheme.background)
             .verticalScroll(scrollState)
     ) {
 
-        // Top Bar (you'll integrate this in your main scaffold later)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-//                .background(MaterialTheme.colorScheme.primary)
                 .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
-            IconButton(onClick = onBack) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    tint = Color.White,
-                    contentDescription = "Back"
-                )
-            }
             Text(
                 "Calendar",
                 color = Color.White,
@@ -81,6 +78,8 @@ fun CalendarScreen(
             factory = { context ->
                 CalendarView(context).apply {
                     date = System.currentTimeMillis()
+//                    setBackgroundColor(backgroundColor.toArgb())
+
 
                     setOnDateChangeListener { _, year, month, dayOfMonth ->
                         val selectedDate =
@@ -93,22 +92,10 @@ fun CalendarScreen(
                                 false
                             }
                         }
-//                        when {
-//                            giftsOnDate.isEmpty() -> {
-//                                onAddGiftForDate(selectedDate)
-//                            }
-//                            giftsOnDate.size == 1 -> {
-//                                onEditGiftForDate(giftsOnDate.first().id)
-//                            }
-//                            else -> {
-//                                 Toast.makeText(context, "Multiple gifts on this date.", Toast.LENGTH_SHORT).show()
-//                                onEditGiftForDate(giftsOnDate.first().id)
-//                            }
-//                        }
-
                         if (giftsOnDate.isEmpty()) {
                             onAddGiftForDate(selectedDate)
                         } else {
+                            onEditGiftForDate(giftsOnDate.first().id)
                             Toast.makeText(
                                 context,
                                 "Gifts on $selectedDate:\n${giftsOnDate.joinToString("\n") { it.title }}",
@@ -118,11 +105,24 @@ fun CalendarScreen(
                     }
                 }
             },
+//           update = { calendarView ->
+//                calendarView.setBackgroundColor(backgroundColor.toArgb())
+//                // Reapply text color on theme switch
+//                calendarView.post {
+//                    try {
+//                        val root = calendarView.getChildAt(0) as? ViewGroup
+//                        root?.let {
+//                            setCalendarTextColors(it, textColor)
+//                        }
+//                    } catch (_: Exception) {
+//                    }
+//                }
+//            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(400.dp)
                 .padding(16.dp)
-//                .background(MaterialTheme.colorScheme.onSurface)
+                .background(Color.White)
         )
 
         Spacer(Modifier.height(16.dp))
@@ -131,7 +131,7 @@ fun CalendarScreen(
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth(),
-//            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
         ) {
             Column(Modifier.padding(16.dp)) {
                 Text(
@@ -139,10 +139,20 @@ fun CalendarScreen(
                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
                 )
                 Spacer(Modifier.height(4.dp))
-                Text("• Dates with gifts are highlighted in your calendar color.")
-                Text("• Tap on a date to view gifts saved for that occasion.")
+//                Text("• Dates with gifts are highlighted in your calendar color.")
+                Text("• Tap on a date to view the gift saved for that occasion.")
             }
         }
     }
 }
+//
+//private fun setCalendarTextColors(viewGroup: ViewGroup, color: Int) {
+//    for (i in 0 until viewGroup.childCount) {
+//        val child = viewGroup.getChildAt(i)
+//        when (child) {
+//            is TextView -> child.setTextColor(color)
+//            is ViewGroup -> setCalendarTextColors(child, color)
+//        }
+//    }
+//}
 

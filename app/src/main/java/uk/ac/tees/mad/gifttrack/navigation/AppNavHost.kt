@@ -116,7 +116,8 @@ fun AppNavHost(
                 onBack = { navController.navigateUp() }, giftListViewModel = giftListViewModel, onAddGiftForDate = { date ->
                     navController.navigate(Routes.ADD_GIFT.route)
                 },
-                onEditGiftForDate = { navController.navigate(Routes.EDIT_GIFT.route) })
+                onEditGiftForDate = { giftId ->
+                    navController.navigate(Routes.EDIT_GIFT.createRoute(giftId)) })
         }
 
         composable(Routes.PROFILE.route) {
