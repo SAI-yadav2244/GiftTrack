@@ -1,33 +1,42 @@
 {
   "project_info": {
-    "project_number": "974929119899",
-    "project_id": "gifttrack-70916",
-    "storage_bucket": "gifttrack-70916.firebasestorage.app"
+    "project_number": "807467103448",
+    "firebase_url": "https://gifttrack-673e6-default-rtdb.firebaseio.com",
+    "project_id": "gifttrack-673e6",
+    "storage_bucket": "gifttrack-673e6.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:974929119899:android:618c847e4568314ab6d43e",
+        "mobilesdk_app_id": "1:807467103448:android:e2fbc64409a2974e8fd3ad",
         "android_client_info": {
           "package_name": "uk.ac.tees.mad.gifttrack"
         }
       },
       "oauth_client": [
         {
-          "client_id": "974929119899-28678lb7a543cjf1hgn7nfs4jndnenh5.apps.googleusercontent.com",
+          "client_id": "807467103448-shgmo4hfkfjl6sg9oob5se1rb20osid3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "uk.ac.tees.mad.gifttrack",
+            "certificate_hash": "083a5a6bd2cc92e226064bbf34318c0ab0f9ad51"
+          }
+        },
+        {
+          "client_id": "807467103448-sha3iu4gv3jlnh7142drb255qv2r6qit.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCAs0DhdFM44IJ6ENeT5UmAlzvG3iztKTw"
+          "current_key": "AIzaSyD7qOUVfoACM_pghHtg2PSuxg2OEKVNdz4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "974929119899-28678lb7a543cjf1hgn7nfs4jndnenh5.apps.googleusercontent.com",
+              "client_id": "807467103448-sha3iu4gv3jlnh7142drb255qv2r6qit.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

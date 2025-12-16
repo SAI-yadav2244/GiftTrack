@@ -49,6 +49,7 @@ fun GiftListScreen(
 
     Column(
         modifier = Modifier.fillMaxSize()
+            .padding(top = 20.dp)
 //            .pullRefresh(pullRefreshState)
     ) {
         Row(

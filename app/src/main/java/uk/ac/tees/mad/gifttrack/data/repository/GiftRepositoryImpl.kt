@@ -34,7 +34,7 @@ class GiftRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) : GiftRepository {
 
-    private val cloudName = "dmgwqrc5b"
+    private val cloudName = "dk4ygdyv7"
     private val uploadPreset = "unsigned_gift_upload"
 
     override fun getAllGifts(): Flow<List<Gift>> {

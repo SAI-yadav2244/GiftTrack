@@ -124,7 +124,7 @@ fun AppNavHost(
             ProfileScreen(
                 onLogout = {
                     navController.navigate(Routes.AUTH.route) {
-                        popUpTo(Routes.GIFT_LIST.route) { inclusive = true }
+                        popUpTo(Routes.AUTH.route) { inclusive = true }
                     }
                 },
                 viewModel = profileViewModel

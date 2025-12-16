@@ -1,9 +1,11 @@
 package uk.ac.tees.mad.gifttrack.ui.viewmodel
 
 import android.content.Intent
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
@@ -21,42 +23,53 @@ class AuthViewModel @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val giftRepository: GiftRepository
 ) : ViewModel() {
-//    private val auth = FirebaseAuth.getInstance()
+
     private val _isLoggedIn = MutableStateFlow(auth.currentUser != null)
     val isLoggedIn: StateFlow<Boolean> = _isLoggedIn
 
     fun handleGoogleSignInResult(data: Intent?) {
         try {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            val account = task.getResult(ApiException::class.java)
 
-            val task = GoogleSignIn.getSignedInAccountFromIntent(
-                data
-            )
-            val account = task.result ?: return
+            Log.d("AuthViewModel", "Google account obtained: ${account.email}")
+
             val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-            auth.signInWithCredential(credential).addOnCompleteListener {
-                if (task.isSuccessful) {
+
+            auth.signInWithCredential(credential).addOnCompleteListener { authTask ->
+                if (authTask.isSuccessful) { // FIX: Was checking 'task' before
+                    Log.d("AuthViewModel", "Firebase sign-in successful: ${auth.currentUser?.email}")
                     saveUserProfileToFirestore()
                     _isLoggedIn.value = true
-                    println("Sign-in successful: ${auth.currentUser?.email}")
                     syncUserData()
                 } else {
                     _isLoggedIn.value = false
-                    println("Sign-in failed: ${task.exception?.message}")
-                }            }
+                    Log.e("AuthViewModel", "Firebase sign-in failed: ${authTask.exception?.message}")
+                }
+            }
+        } catch (e: ApiException) {
+            Log.e("AuthViewModel", "Google Sign-In failed with code: ${e.statusCode}")
+            when (e.statusCode) {
+                10 -> Log.e("AuthViewModel", "DEVELOPER_ERROR: Check SHA-1, package name, and Web Client ID")
+                12501 -> Log.e("AuthViewModel", "SIGN_IN_CANCELLED: User cancelled sign-in")
+                7 -> Log.e("AuthViewModel", "NETWORK_ERROR: No internet connection")
+                else -> Log.e("AuthViewModel", "Error: ${e.message}")
+            }
+            _isLoggedIn.value = false
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("AuthViewModel", "Unexpected error: ${e.message}", e)
             _isLoggedIn.value = false
         }
     }
 
-    private fun syncUserData() {
+    fun syncUserData() {
         viewModelScope.launch {
             try {
-                println("Syncing Firestore → Room...")
+                Log.d("AuthViewModel", "Syncing Firestore → Room...")
                 giftRepository.syncFromFirestore()
-                println("Sync completed.")
+                Log.d("AuthViewModel", "Sync completed.")
             } catch (e: Exception) {
-                println("Sync failed: ${e.message}")
+                Log.e("AuthViewModel", "Sync failed: ${e.message}", e)
             }
         }
     }
@@ -77,8 +90,13 @@ class AuthViewModel @Inject constructor(
         firestore.collection("users")
             .document(uid)
             .set(profile, SetOptions.merge())
+            .addOnSuccessListener {
+                Log.d("AuthViewModel", "User profile saved to Firestore")
+            }
+            .addOnFailureListener { e ->
+                Log.e("AuthViewModel", "Failed to save user profile: ${e.message}")
+            }
     }
-
 
     fun signOut() {
         auth.signOut()

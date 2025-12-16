@@ -7,31 +7,22 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.*
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import uk.ac.tees.mad.gifttrack.data.remote.EtsyViewModel
 import uk.ac.tees.mad.gifttrack.navigation.AppNavHost
 import uk.ac.tees.mad.gifttrack.navigation.BottomNavBar
 import uk.ac.tees.mad.gifttrack.navigation.Routes
-import uk.ac.tees.mad.gifttrack.ui.viewmodel.AddGiftViewModel
-import uk.ac.tees.mad.gifttrack.ui.viewmodel.CaptureViewModel
-import uk.ac.tees.mad.gifttrack.ui.viewmodel.GiftListViewModel
-import uk.ac.tees.mad.gifttrack.ui.viewmodel.AuthViewModel
+import uk.ac.tees.mad.gifttrack.ui.viewmodel.*
 import uk.ac.tees.mad.gifttrack.ui.theme.GiftTrackTheme
-import uk.ac.tees.mad.gifttrack.ui.viewmodel.ProfileViewModel
-
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -42,22 +33,19 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         auth = FirebaseAuth.getInstance()
-        val gso = GoogleSignInOptions.DEFAULT_SIGN_IN
+
         setContent {
-            GiftTrackTheme {
-//                Surface(
-//                    modifier = Modifier
-//                        .fillMaxSize()
-//                        .windowInsetsPadding(WindowInsets.safeDrawing),
-//                    color = MaterialTheme.colorScheme.onBackground,
-//                ) {
+            val profileViewModel: ProfileViewModel = hiltViewModel()
+            val isDarkTheme by profileViewModel.themeMode.collectAsState() // Observe theme changes
+
+            GiftTrackTheme(darkTheme = isDarkTheme) { // Apply theme dynamically
                 val navController = rememberNavController()
                 val authViewModel: AuthViewModel = hiltViewModel()
                 val giftListViewModel: GiftListViewModel = hiltViewModel()
                 val addGiftViewModel: AddGiftViewModel = hiltViewModel()
                 val captureViewModel: CaptureViewModel = hiltViewModel()
-                val profileViewModel: ProfileViewModel = hiltViewModel()
                 val etsyViewModel: EtsyViewModel = hiltViewModel()
+
                 val currentRoute =
                     navController.currentBackStackEntryAsState().value?.destination?.route
 
@@ -66,6 +54,7 @@ class MainActivity : ComponentActivity() {
                     Routes.CALENDAR.route,
                     Routes.PROFILE.route
                 )
+
                 Scaffold(
                     bottomBar = {
                         if (showBottomBar) {
@@ -99,7 +88,6 @@ class MainActivity : ComponentActivity() {
                         etsyViewModel = etsyViewModel
                     )
                 }
-//                }
             }
         }
     }

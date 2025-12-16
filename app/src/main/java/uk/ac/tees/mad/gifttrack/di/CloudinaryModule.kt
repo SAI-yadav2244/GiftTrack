@@ -16,7 +16,7 @@ object CloudinaryModule {
     fun provideCloudinary(): Cloudinary {
         return Cloudinary(
             mapOf(
-                "cloud_name" to "dmgwqrc5b"
+                "cloud_name" to "dk4ygdyv7"
             )
         )
     }

@@ -55,11 +55,11 @@ fun SplashScreen(
                 .size(160.dp)
                 .alpha(alphaAnim.value)
         )
-        if (gifts.isNotEmpty()) {
-            Text(
-                text = "Gift of the Day: ${gifts.first().title}",
-                modifier = Modifier.padding(top = 24.dp)
-            )
-        }
+//        if (gifts.isNotEmpty()) {
+//            Text(
+//                text = "Gift of the Day: ${gifts.first().title}",
+//                modifier = Modifier.padding(top = 24.dp)
+//            )
+//        }
     }
 }

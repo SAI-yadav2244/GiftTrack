@@ -50,6 +50,7 @@ fun CalendarScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(top = 20.dp)
             .verticalScroll(scrollState)
     ) {
 
